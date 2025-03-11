@@ -4,19 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stacked Difference Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #161b22;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            background-color: #21262d;
+            color: white;
+            text-align: center;
+        }
+        button {
+            width: 85%;
+            padding: 10px;
+            background-color: #00c805;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #009b04;
+        }
+        .number-list {
+            text-align: left;
+            padding: 0;
+        }
+        .number-list li {
+            list-style: none;
+            background-color: #21262d;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .difference-box {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #00c805;
+        }
+    </style>
 </head>
 <body>
-    <h2>Stacked Difference Calculator</h2>
-    <label for="numberInput">Enter a Number:</label>
-    <input type="number" id="numberInput" step="any">
-    <button onclick="addNumber()">Submit</button>
-    
-    <h3>Entered Numbers</h3>
-    <ul id="numberList"></ul>
-    
-    <h3>Accumulated Difference</h3>
-    <div id="differenceBox" style="border: 1px solid black; padding: 10px; width: 100px; text-align: center;">0</div>
-    
+    <div class="container">
+        <h2>Trading Calculator</h2>
+        <input type="number" id="numberInput" step="any" placeholder="Enter a number">
+        <button onclick="addNumber()">Submit</button>
+        
+        <h3>Entered Numbers</h3>
+        <ul id="numberList" class="number-list"></ul>
+        
+        <h3>Accumulated Difference</h3>
+        <div id="differenceBox" class="difference-box">0</div>
+    </div>
+
     <script>
         let numbers = JSON.parse(localStorage.getItem("storedNumbers")) || [];
         let accumulatedDifference = parseFloat(localStorage.getItem("accumulatedDifference")) || 0;
