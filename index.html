@@ -3,70 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Difference Calculator</title>
+    <title>Stacked Difference Calculator</title>
 </head>
 <body>
-    <h2>Difference Calculator</h2>
-    <label for="num1">Number 1:</label>
-    <input type="number" id="num1" step="any">
-    <label for="num2">Number 2:</label>
-    <input type="number" id="num2" step="any">
-    <button onclick="calculateDifference()">Calculate</button>
+    <h2>Stacked Difference Calculator</h2>
+    <label for="numberInput">Enter a Number:</label>
+    <input type="number" id="numberInput" step="any">
+    <button onclick="addNumber()">Submit</button>
     
-    <h3>Results</h3>
-    <table border="1" id="resultTable">
-        <tr>
-            <th>Number 1</th>
-            <th>Number 2</th>
-            <th>Difference</th>
-        </tr>
-    </table>
-
+    <h3>Entered Numbers</h3>
+    <ul id="numberList"></ul>
+    
+    <h3>Accumulated Difference</h3>
+    <div id="differenceBox" style="border: 1px solid black; padding: 10px; width: 100px; text-align: center;">0</div>
+    
     <script>
-        function calculateDifference() {
-            let num1 = parseFloat(document.getElementById('num1').value);
-            let num2 = parseFloat(document.getElementById('num2').value);
+        let numbers = JSON.parse(localStorage.getItem("storedNumbers")) || [];
+        let accumulatedDifference = parseFloat(localStorage.getItem("accumulatedDifference")) || 0;
 
-            if (isNaN(num1) || isNaN(num2)) {
-                alert("Please enter valid numbers");
+        function addNumber() {
+            let inputField = document.getElementById('numberInput');
+            let num = parseFloat(inputField.value);
+            
+            if (isNaN(num)) {
+                alert("Please enter a valid number");
                 return;
             }
-
-            let difference = num1 - num2;
-            let table = document.getElementById('resultTable');
-            let row = table.insertRow(-1);
-            let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1);
-            let cell3 = row.insertCell(2);
-
-            cell1.innerHTML = num1;
-            cell2.innerHTML = num2;
-            cell3.innerHTML = difference;
-
-            // Store data in local storage
-            let storedData = JSON.parse(localStorage.getItem("calculations")) || [];
-            storedData.push({ num1, num2, difference });
-            localStorage.setItem("calculations", JSON.stringify(storedData));
+            
+            numbers.unshift(num); // Add number to the top of the list
+            if (numbers.length > 1) {
+                accumulatedDifference += (numbers[0] - numbers[1]);
+            }
+            
+            localStorage.setItem("storedNumbers", JSON.stringify(numbers));
+            localStorage.setItem("accumulatedDifference", accumulatedDifference);
+            
+            updateDisplay();
+            inputField.value = "";
         }
 
-        function loadPreviousCalculations() {
-            let storedData = JSON.parse(localStorage.getItem("calculations")) || [];
-            let table = document.getElementById('resultTable');
-
-            storedData.forEach(entry => {
-                let row = table.insertRow(-1);
-                let cell1 = row.insertCell(0);
-                let cell2 = row.insertCell(1);
-                let cell3 = row.insertCell(2);
-
-                cell1.innerHTML = entry.num1;
-                cell2.innerHTML = entry.num2;
-                cell3.innerHTML = entry.difference;
+        function updateDisplay() {
+            let list = document.getElementById("numberList");
+            let differenceBox = document.getElementById("differenceBox");
+            list.innerHTML = "";
+            
+            numbers.forEach(num => {
+                let li = document.createElement("li");
+                li.textContent = num;
+                list.appendChild(li);
             });
+            
+            differenceBox.textContent = accumulatedDifference;
         }
 
-        // Load previous calculations when the page loads
-        window.onload = loadPreviousCalculations;
+        window.onload = updateDisplay;
     </script>
 </body>
 </html>
